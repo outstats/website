@@ -1,4 +1,5 @@
-"use client"
+'use client'
+
 import { JSX, useEffect, useState } from "react"
 
 export default function ThemeSwitch(): JSX.Element {
