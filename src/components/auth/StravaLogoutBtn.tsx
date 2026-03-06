@@ -1,27 +1,32 @@
 'use client'
 
-import { useAuthStore } from "@/stores/useAuthStore"
+import { useLogout } from "@/lib/hooks/useAuth.hooks"
 import { useRouter } from "next/navigation"
 import { JSX } from "react"
 
-export default function StravaLogoutButton(): JSX.Element | null {
+export default function StravaLogoutButton(): JSX.Element {
   const router = useRouter()
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  const logout = useAuthStore((state) => state.logout)
+  const { mutate: logout, isPending } = useLogout()
 
   const handleLogout = async () => {
-    await logout()
-    router.push('/')
+    logout(undefined, {
+      onSuccess: () => {
+        router.push('/')
+      }
+    })
   }
-
-  if (!isAuthenticated) return null
 
   return (
     <button
       onClick={handleLogout}
+      disabled={isPending}
       className="bg-orange-300 cursor-pointer"
     >
-      Se déconnecter de Strava
+      {
+        isPending
+          ? 'Deconnexion...'
+          : 'Se déconnecter de Strava'
+      }     
     </button>
   )
 }

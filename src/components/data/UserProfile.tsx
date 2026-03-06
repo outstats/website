@@ -1,16 +1,18 @@
 'use client'
 
-import { useAuthStore } from "@/stores/useAuthStore"
+import { useAuthMe } from "@/lib/hooks/useAuth.hooks"
 import { JSX } from "react"
 
 export default function UserProfile(): JSX.Element | null {
-  const user = useAuthStore((state) => state.user)
+  const { data: user, isLoading } = useAuthMe()
+
+  if (isLoading) return (
+    <p>Chargement du profil...</p>
+  )
 
   if (!user) return null
 
-  const stravaProfile = user.strava
-
   return (
-    <p>Welcome {stravaProfile.stravaFirstName}. From {stravaProfile.stravaCountry}!</p>
+    <p>Welcome {user.strava.stravaFirstName}. From {user.strava.stravaCountry}!</p>
   )
 }

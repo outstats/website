@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { QueryProvider } from "@/lib/providers/QueryClient.provider"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
-import AuthInitializer from "@/components/auth/AuthInitializer"
 import "../style/globals.css"
 
 const geistSans = Geist({
@@ -26,18 +26,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-
   return (
     <html lang="fr">
       <body className={`flex-col justify-between ${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthInitializer>
+        <QueryProvider>
           <div className="min-h-screen">
             <Navbar />
             {children}
           </div>
 
           <Footer />
-        </AuthInitializer>
+        </QueryProvider>
       </body>
     </html>
   )

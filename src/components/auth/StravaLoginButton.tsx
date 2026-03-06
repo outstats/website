@@ -1,25 +1,27 @@
 'use client'
 
-import { useAuthStore } from "@/stores/useAuthStore"
-import { useRouter } from "next/navigation"
+import { useLogin } from "@/lib/hooks/useAuth.hooks"
 import { JSX } from "react"
 
-export default function StravaLoginButton(): JSX.Element | null {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+export default function StravaLoginButton(): JSX.Element {
+  const { mutate, isPending } = useLogin()
 
   const handleLogin = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
-    window.location.href = `${apiUrl}/auth/strava`
+    const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/strava`
+    window.location.href = authUrl
   }
-
-  if (isAuthenticated) return null
 
   return (
     <button
       onClick={handleLogin}
+      disabled={isPending}
       className="bg-orange-300 cursor-pointer"
     >
-      Se connecter avec Strava
+      {
+        isPending
+          ? 'Connexion...'
+          : 'Se connecter avec Strava'
+      }
     </button>
   )
 }

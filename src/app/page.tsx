@@ -1,6 +1,7 @@
 import StravaLoginButton from "@/components/auth/StravaLoginButton"
+import StravaLoginOrLogoutButton from "@/components/auth/StravaLoginOrLogoutButton"
 import StravaLogoutButton from "@/components/auth/StravaLogoutBtn"
-import StravaSyncingIndicator from "@/components/auth/StravaSyncingIndicator"
+import StravaSyncingIndicator from "@/components/auth/StravaSyncStatus"
 import Stats from "@/components/data/Stats"
 import UserProfile from "@/components/data/UserProfile"
 import HomeContent from "@/components/pageContents/HomeContent"
@@ -11,8 +12,7 @@ export default function Home(): JSX.Element {
     <div>
       <h1 className="text-2xl">OutStats</h1>
       
-      <StravaLoginButton />
-      <StravaLogoutButton />
+      <StravaLoginOrLogoutButton />
       
       <HomeContent />
     </div>

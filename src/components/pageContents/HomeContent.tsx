@@ -1,37 +1,33 @@
 'use client'
 
-import { useActivitiesStore } from "@/stores/useActivitiesStore"
-import { useAuthStore } from "@/stores/useAuthStore"
-import { JSX, useEffect } from "react"
-import StravaSyncingIndicator from "../auth/StravaSyncingIndicator"
+import { useStravaSyncStatus } from "@/lib/hooks/useStrava.hooks"
+import { JSX } from "react"
+import StravaSyncingIndicator from "../auth/StravaSyncStatus"
 import UserProfile from "../data/UserProfile"
 import Stats from "../data/Stats"
 
 export default function HomeContent(): JSX.Element {
-  const { isLoading, isAuthenticated } = useAuthStore()
-  const { fetchStats, fetchActivities } = useActivitiesStore()
+  const { data: syncStatus, isLoading, error } = useStravaSyncStatus()
 
-  useEffect(() => {
-    if (!isAuthenticated) return
-    fetchStats()
-    fetchActivities()
-  }, [isAuthenticated, fetchStats, fetchActivities])
+  if (isLoading) return (
+    <p>Vérification du statut de la synchroniation...</p>
+  )
 
-  if (isLoading) return <p>Chargement...</p>
+  if (error) return (
+    <p>Erreur lors de la synchronisation des données</p>
+  )
 
   return (
-    <>
-      {isAuthenticated ? (
-        <div>
-          <StravaSyncingIndicator />
-          <UserProfile />
-          <Stats />
-        </div>
-      ) : (
-        <div>
-          <p>Connectez votre compte Strava pour voir les statistiques</p>
-        </div>
-      )}
-    </>
+    syncStatus?.isSynced ? (
+      <div>
+        <StravaSyncingIndicator />
+        <UserProfile />
+        <Stats />
+      </div>
+    ) : (
+      <div>
+        <p>Connectez votre compte Strava pour voir les statistiques</p>
+      </div>
+    )
   )
 }

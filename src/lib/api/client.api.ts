@@ -1,4 +1,3 @@
-import { error } from "console"
 import { API_ERRORS, ApiError, handleApiResponse } from "./errors.api"
 
 
@@ -46,7 +45,7 @@ export class ApiClient {
         headers
       })
     } catch (e) {
-      throw new ApiError(0, API_ERRORS.NETWORK_ERROR, 'Network request failed', error)
+      throw new ApiError(0, API_ERRORS.NETWORK_ERROR, 'Network request failed', e)
     }
 
     if (res.status === 401 && !skipAuth) {

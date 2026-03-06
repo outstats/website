@@ -1,25 +1,16 @@
-import { stravaApi } from "@/lib/api"
-import { useActivitiesStore } from "@/stores/useActivitiesStore"
-import { useAuthStore } from "@/stores/useAuthStore"
-import { JSX, useEffect, useState } from "react"
-
-interface ActivityStats {
-  totalDistanceKm: number
-  byCategory: Record<string, number>
-}
+import { useStravaStats } from "@/lib/hooks/useStrava.hooks"
+import { JSX } from "react"
 
 export default function Stats(): JSX.Element | null {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  const stats = useActivitiesStore((state) => state.stats)
-  const isLoadingStats = useActivitiesStore((state) => state.isLoadingStats)
-  const fetchStats = useActivitiesStore((state) => state.fetchStats)
+  const { data: stats, isLoading, error } = useStravaStats()
 
-  useEffect(() => {
-    if (!isAuthenticated) return
-    fetchStats()
-  }, [isAuthenticated, fetchStats])
+  if (isLoading) return (
+    <p>Chargement des statistiques...</p>
+  )
 
-  if (isLoadingStats) return <p>Chargement des statistiques...</p>
+  if (error) return (
+    <p>Erreur lors du chargement des statistiques</p>
+  )
 
   if (!stats) return null
 
